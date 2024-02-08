@@ -1,0 +1,28 @@
+live_config_reload = true
+
+[cursor]
+style = "Underline"
+
+[font]
+normal = { family = "firacode", style = "Regular" }
+bold = { family = "firacode", style = "Bold" }
+italic = { family = "firacode", style = "Italic" }
+size = 13
+
+[[hints.enabled]]
+command = "gio open"
+hyperlinks = true
+post_processing = true
+persist = false
+mouse.enabled = true
+binding = { key = "U", mods = "Control|Shift" }
+regex = "(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh:|ftp://)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
+
+[selection]
+save_to_clipboard = true
+
+[window]
+opacity = 0.85
+padding = { x = 3, y = 3 }
+dynamic_padding = true
+
