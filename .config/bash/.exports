@@ -34,7 +34,7 @@ export LESS_TERMCAP_ZN=$(tput ssubm)
 export LESS_TERMCAP_ZV=$(tput rsubm)
 export LESS_TERMCAP_ZO=$(tput ssupm)
 export LESS_TERMCAP_ZW=$(tput rsupm)
-export GROFF_NO_SGR=1 
+export GROFF_NO_SGR=1
 
 export DBUS_SESSION_BUS_ADDRESS
 DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/user/$(id -u)/bus
