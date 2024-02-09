@@ -1,0 +1,146 @@
+#!/bin/bash
+
+# https://github.com/jessfraz/dotfiles
+
+# Linux specific aliases
+#alias pbcopy='xclip -selection clipboard'
+#alias pbpaste='xclip -selection clipboard -o'
+
+# Easier navigation: .., ..., ...., ....., ~ and -
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias -- -="cd -"
+
+# Shortcuts
+alias dl="cd ~/Downloads"
+alias g="git"
+alias h="history"
+
+# Safe rm
+alias rm="rm -i"
+
+# REVIEW
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+	# shellcheck disable=SC2015
+	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+	#alias ll='ls -l --color=auto'
+	alias lla='ls -la --color=auto'
+	alias dir='dir --color=auto'
+	alias vdir='vdir --color=auto'
+
+	alias grep='grep --color=auto'
+	alias fgrep='fgrep --color=auto'
+	alias egrep='egrep --color=auto'
+fi
+
+# Detect which `ls` flavor is in use
+if ls --color > /dev/null 2>&1; then # GNU `ls`
+	colorflag="--color"
+else # OS X `ls`
+	colorflag="-G"
+fi
+
+# List all files colorized in long format
+# shellcheck disable=SC2139
+alias l="ls -lF ${colorflag}"
+
+# List all files colorized in long format, including dot files
+# shellcheck disable=SC2139
+alias la="ls -laF ${colorflag}"
+
+# List only directories
+# shellcheck disable=SC2139
+alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
+
+# Colorized cat
+#alias cat='ccat --bg=dark'
+
+# Enable aliases to be sudo’ed
+alias sudo='sudo '
+
+# Get week number
+alias week='date +%V'
+
+# Stopwatch
+alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
+
+# IP addresses
+alias pubip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ip address | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | grep -Eo '([0-9]*\.){3}[0-9]*'"
+#alias ips="sudo ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+
+# Flush Directory Service cache on OSX
+#alias flush="dscacheutil -flushcache && killall -HUP mDNSResponder"
+
+# View HTTP traffic
+# could export the interface name or just not use it
+alias sniff="sudo ngrep -d 'wlan0' -t '^(GET|POST) ' 'tcp and port 80'"
+alias httpdump="sudo tcpdump -i wlan0 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
+
+# Canonical hex dump; some systems have this symlinked
+command -v hd > /dev/null || alias hd="hexdump -C"
+
+# OS X has no `md5sum`, so use `md5` as a fallback
+command -v md5sum > /dev/null || alias md5sum="md5"
+
+# OS X has no `sha1sum`, so use `shasum` as a fallback
+command -v sha1sum > /dev/null || alias sha1sum="shasum"
+
+# Trim new lines and copy to clipboard
+alias c="tr -d '\n' | wl-copy"
+
+# URL-encode strings
+alias urlencode='python2 -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
+
+# git
+alias gs="git s"
+alias gl="git l"
+
+# Merge PDF files
+# Usage: `mergepdf -o output.pdf input{1,2,3}.pdf`
+#alias mergepdf='/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py'
+
+# Intuitive map function
+# For example, to list all directories that contain a certain file:
+# find . -name .gitattributes | map dirname
+alias map="xargs -n1"
+
+# One of @janmoesen’s ProTip™s
+#for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
+#	# shellcheck disable=SC2139,SC2140
+#	alias "$method"="lwp-request -m \"$method\""
+#done
+
+# Kill all the tabs in Chrome to free up memory
+# [C] explained: http://www.commandlinefu.com/commands/view/402/exclude-grep-from-your-grepped-output-of-ps-alias-included-in-description
+#alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
+
+# service information of processes
+alias psc='ps xawf -eo pid,user,cgroup,%mem,%cpu,args'
+
+# Lock the screen (when going AFK)
+alias afk="slock"
+
+# vhosts
+alias hosts='sudo vim /etc/hosts'
+
+# copy working directory
+alias cwd='pwd | tr -d "\r\n" | wl-copy'
+
+# copy file interactive
+alias cp='cp -i'
+
+# move file interactive
+alias mv='mv -i'
+
+# untar
+alias untar='tar xvf'
+
+# Pipe my public key to my clipboard.
+alias pubkey="more ~/.ssh/id_ed25519.pub | wl-copy | echo '=> Public key copied to pasteboard.'"
+
+# Pipe my private key to my clipboard.
+alias prikey="more ~/.ssh/id_ed25519 | wl-copy | echo '=> Private key copied to pasteboard.'"

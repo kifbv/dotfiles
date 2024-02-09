@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Make vim the default editor
+export EDITOR=/usr/bin/vim
+#export TERMINAL="allacritty"
+
+# Do not truncate bash history
+export HISTSIZE=-1
+export HISTFILESIZE=$HISTSIZE
+export HISTCONTROL=ignorespace:erasedups
+# Make some commands not show up in history
+export HISTIGNORE=" *:ls:cd:cd -:pwd:exit:date:* -h:pony:pony add *:pony update *:pony save *:pony ls:pony ls *"
+export HISTTIMEFORMAT="%F:%T"
+
+# Prefer US English and use UTF-8
+#export LANG="en_US.UTF-8";
+#export LC_ALL="en_US.UTF-8";
+
+# Don’t clear the screen after quitting a manual page
+#export MANPAGER="less -X"
+
+export DBUS_SESSION_BUS_ADDRESS
+DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/user/$(id -u)/bus
+
+export TODOTXT_DEFAULT_ACTION=ls
+
+# hidpi for gtk apps
+#export GDK_SCALE=2
+#export GDK_DPI_SCALE=0.5
+#export QT_DEVICE_PIXEL_RATIO=2
+
+# turn on go vendoring experiment
+#export GO15VENDOREXPERIMENT=1
+
+#export DOCKER_CONTENT_TRUST=1
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+#export PATH="$PATH:$HOME/.rvm/bin"
+# https://github.com/rvm/rubygems-bundler
+# to be able to work also with bundler
+#export RUBYGEMS_GEMDEPS=-
+
+# disable the default virtualenv prompt change
+#export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+# Set git config according to hostname
+#export GIT_CONFIG=$HOME/.gitconfig_$HOSTNAME
+#[[ -h ~/.gitconfig ]] || ln -s ~/.gitconfig_$HOSTNAME ~/.gitconfig
+
