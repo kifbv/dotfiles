@@ -15,7 +15,7 @@ trap 'tput sgr0' DEBUG
 # * ~/.path can be used to extend `$PATH`.
 # * add a ~/.extra file to use for other settings you don’t want to commit.
 #for file in ~/.{aliases,functions,dockerfunc,path,exports}; do
-for file in ~/.config/bash/.{aliases,functions,exports}; do
+for file in ~/.config/bash/.{aliases,autocompletion,functions,exports}; do
 	if [[ -r "$file" ]] && [[ -f "$file" ]]; then
 		# shellcheck source=/dev/null
 		source "$file"
