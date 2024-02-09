@@ -1,0 +1,40 @@
+# see: https://wiki.archlinux.org/title/Readline
+#
+$include /etc/inputrc
+
+# i'm just used to it...
+set editing-mode emacs
+
+# color completion suggestions
+set colored-completion-prefix on
+set colored-stats on
+set visible-stats on
+set mark-symlinked-directories on
+set menu-complete-display-prefix on
+
+# do not echo ^C after hitting Ctrl-C
+set echo-control-characters off
+
+# insert clipboard as single string of characters
+set enable-bracketed-paste on
+
+# case insensitive completion
+set completion-ignore-case on
+set completion-map-case on
+
+# do not echo ^C when Control-c is pressed
+set echo-control-characters off
+
+# some bindings
+# get man page of command before cursor with ESC-m
+"\em": "\C-a\eb\ed\C-y\e#man \C-y\C-m\C-p\C-p\C-a\C-d\C-e"
+
+# prefix command with sudo with ESC-s
+"\es":"\C-asudo \C-e"
+
+# smarter history search with up/down arrows
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
+# faster completion
+set show-all-if-ambiguous on
