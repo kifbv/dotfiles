@@ -11,30 +11,57 @@ trap 'tput sgr0' DEBUG
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Load the shell dotfiles, and then some:
+# * ~/.path can be used to extend `$PATH`.
+# * add a ~/.extra file to use for other settings you don’t want to commit.
+#for file in ~/.{aliases,functions,dockerfunc,path,exports}; do
+for file in ~/.{aliases,functions,exports}; do
+	if [[ -r "$file" ]] && [[ -f "$file" ]]; then
+		# shellcheck source=/dev/null
+		source "$file"
+	fi
+done
+unset file
+
+## Load the completion files:
+#for file in ~/.autocompletion_functions/*; do
+#	if [[ -r "$file" ]] && [[ -f "$file" ]]; then
+#		# shellcheck source=/dev/null
+#		source "$file"
+#	fi
+#done
+#unset file
+
+# Case-insensitive globbing (used in pathname expansion)
+shopt -s nocaseglob
+
+# Append to the Bash history file, rather than overwriting it
+shopt -s histappend
+
+# Autocorrect typos in path names when using `cd`
+shopt -s cdspell
+
+# Enable some Bash 4 features when possible:
+# * `autocd`, e.g. `**/qux` will enter `./foo/bar/baz/qux`
+# * Recursive globbing, e.g. `echo **/*.txt`
+for option in autocd globstar; do
+	shopt -s "$option" 2> /dev/null
+done
+
 # check the window size after each command and, if necessary, update the values
 # of LINES and COLUMNS. (i.e. correct line wrap on window resize)
 shopt -s checkwinsize
 
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
+# Add tab completion for SSH hostnames based on ~/.ssh/config
+# ignoring wildcards
+[[ -e "$HOME/.ssh/config" ]] && complete -o "default" \
+	-o "nospace" \
+	-W "$(grep "^Host" ~/.ssh/config | \
+	grep -v "[?*]" | cut -d " " -f2 | \
+	tr ' ' '\n')" scp sftp ssh
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-	# shellcheck disable=SC2015
-	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-	alias ll='ls -l --color=auto'
-	alias lla='ls -la --color=auto'
-	alias dir='dir --color=auto'
-	alias vdir='vdir --color=auto'
-
-	alias grep='grep --color=auto'
-	alias fgrep='fgrep --color=auto'
-	alias egrep='egrep --color=auto'
-fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -64,11 +91,13 @@ if ! pgrep -x -u "${USER}" gpg-agent >/dev/null 2>&1; then
 	gpg-connect-agent /bye >/dev/null 2>&1
 	gpg-connect-agent updatestartuptty /bye >/dev/null
 fi
+
 # Set SSH to use gpg-agent
 unset SSH_AGENT_PID
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
 	export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
 fi
+
 # add alias for ssh to update the tty
 alias ssh="gpg-connect-agent updatestartuptty /bye >/dev/null; ssh"
 
