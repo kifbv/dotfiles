@@ -57,18 +57,17 @@ output $dell34 resolution 3440x1440 position 0,0
 output $laptop resolution 1920x1080 position 3440,0
 #
 # Watch closed laptop lid
+# This will turn on/off the laptop lid when it is opened/closed
 bindswitch --reload --locked lid:on output $laptop disable
 bindswitch --reload --locked lid:off output $laptop enable
 #
 # Display timeouts
 #
-# This will turn on/off the laptop lid when it is opened/closed
-#
 exec_always swayidle -w \
-      timeout 150 'swaylock-blur -- -f' \
-      timeout 300 'swaymsg "output * dpms off"' \
+      timeout 300 '$locker -- -f' \
+      timeout 600 'swaymsg "output * dpms off"' \
       resume 'swaymsg "output * dpms on"' \
-      before-sleep 'swaylock-blur -- -f'
+      before-sleep '$locker -- -f'
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
