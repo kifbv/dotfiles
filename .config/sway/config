@@ -18,11 +18,10 @@ set $term alacritty
 set $bgi4 /usr/share/backgrounds/sway/forest.jpg
 #set $bgi5 /usr/share/backgrounds/sway/forest.jpg
 # EndCredits bg image
-set $locker swaylock -ekl -s fill --font Hack --font-size 12 --image $bgi4
+set $lock_screen swaylock --ignore-empty-password \
+                 --scaling fill --image $bgi4 \
+                 --font Hack --font-size 12 --daemonize
 # Your preferred application launcher
-# Note: pass the final command to swaymsg so that the resulting window can be opened
-# on the original workspace that the command was run on.
-#set $menu dmenu_path | dmenu | xargs swaymsg exec --
 set $menu wofi --show=drun --lines=5 --prompt=""
 # Get the names of the outputs by running: swaymsg -t get_outputs
 set $dell34 DP-1
@@ -38,14 +37,13 @@ gaps inner 6
 smart_gaps on
 smart_borders no_gaps
 # small border just to identify active window more easily
-default_border pixel 2
+default_border pixel 3
 #default_border none
 
 ### Short lived GUIs to be opened floating
 #
 # audio controls
 for_window [app_id="pavucontrol"] floating enable
-
 
 ### Output configuration
 #
@@ -61,23 +59,15 @@ output $laptop resolution 1920x1080 position 3440,0
 bindswitch --reload --locked lid:on output $laptop disable
 bindswitch --reload --locked lid:off output $laptop enable
 #
-# Display timeouts
-#
-exec_always swayidle -w \
-      timeout 300 '$locker -- -f' \
-      timeout 600 'swaymsg "output * dpms off"' \
-      resume 'swaymsg "output * dpms on"' \
-      before-sleep '$locker -- -f'
-#
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
 #
-#exec swayidle -w \
-#         timeout 300 'swaylock -f -c 000000' \
-#         timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-#         before-sleep 'swaylock -f -c 000000'
-
+#exec_always swayidle -w \
+#            timeout 300  '$lock_screen' \
+#            timeout 900  'swaymsg "output * dpms off"' \
+#                 resume  'swaymsg "output * dpms on"' \
+#            before-sleep '$lock_screen'
 
 ### Input configuration
 #
@@ -91,7 +81,12 @@ input type:touchpad {
     tap_button_map lrm
 }
 
-input type:keyboard {
+#input type:keyboard {
+#    xkb_layout gb
+#    xkb_variant intl
+#}
+
+input identifier:"21558:24672:Tokyo_Keyboard_Tokyo60" {
     xkb_layout us
     xkb_variant intl
 }
@@ -125,7 +120,7 @@ input type:keyboard {
     bindsym $mod+Shift+e exec swaynag -t tron -m 'Aperture clear?' -B 'Exit the Grid.' 'swaymsg exit'
 
     # Lock screen
-    bindsym $mod+Shift+z exec $locker
+    bindsym $mod+Shift+z exec $lock_screen
 #
 # Moving around:
 #
@@ -179,7 +174,7 @@ input type:keyboard {
     bindsym $mod+v splitv
 
     # Toggle between stacking/tabbed/splith/splitv
-    bindsym $mod+x layout toggle all
+    bindsym $mod+x layout toggle tabbed splith
 
     # Switch the current container between different layout styles
     #bindsym $mod+s layout stacking
@@ -215,6 +210,13 @@ input type:keyboard {
     bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
     bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
     bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+#
+# Screenshots
+#
+    # Screenshot part of screen and copy to clipboard
+    bindsym $mod+g slurp | grim -g - - | wl-copy
+
 #
 # Resizing containers:
 #
@@ -239,35 +241,24 @@ mode "resize" {
 # Read `man 5 sway-bar` for more information about this section.
 bar {
     swaybar_command waybar
-
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    #status_command while date +'%A %e %B %R'; do sleep 30; done
-
-    #colors {
-    #    statusline #ffffff
-    #    background #323232
-    #    active_workspace #323232 #000000 #5c5c5c
-    #    inactive_workspace #323232 #323232 #5c5c5c
-    #}
 }
 
 # TO FIX
 # Power management commands
 # Black background screen (TODO: backlight off)
-set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (p) poweroff
+#set $mode_system System (l) lock, (e) logout, (s) suspend, (r) reboot, (p) poweroff
 #bindsym $mod+p mode "$mode_system"
-mode "$mode_system" {
-	bindsym l exec --no-startup-id $locker, mode "default"
-	bindsym e exec --no-startup-id sway-msg exit, mode "default"
-	bindsym s exec --no-startup-id $locker && systemctl suspend, mode "default"
-	bindsym h exec --no-startup-id $locker && systemctl hibernate, mode "default"
-	bindsym r exec --no-startup-id systemctl reboot, mode "default"
-	bindsym p exec --no-startup-id systemctl poweroff, mode "default"
-
-	# back to normal: Enter or Escape
-	bindsym Return mode "default"
-	bindsym Escape mode "default"
-}
+#mode "$mode_system" {
+#	bindsym l exec --no-startup-id $lock_screen, mode "default"
+#	bindsym e exec --no-startup-id sway-msg exit, mode "default"
+#	bindsym s exec --no-startup-id $lock_screen && systemctl suspend, mode "default"
+#	#bindsym h exec --no-startup-id $lock_screen && systemctl hibernate, mode "default"
+#	bindsym r exec --no-startup-id systemctl reboot, mode "default"
+#	bindsym p exec --no-startup-id systemctl poweroff, mode "default"
+#
+#	# back to normal: Enter or Escape
+#	bindsym Return mode "default"
+#	bindsym Escape mode "default"
+#}
 
 include /etc/sway/config.d/*

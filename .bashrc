@@ -3,34 +3,12 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-# colored input text
-# see https://wiki.archlinux.org/index.php/Bash/Prompt_customization#Escapes_between_command_input_and_output
-# see also $PS1 (check liquidprompt.theme)
-trap 'tput sgr0' DEBUG
-
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# Load the shell dotfiles, and then some:
-# * ~/.path can be used to extend `$PATH`.
-# * add a ~/.extra file to use for other settings you don’t want to commit.
-#for file in ~/.{aliases,functions,dockerfunc,path,exports}; do
-for file in ~/.config/bash/.{aliases,autocompletion,functions,exports}; do
-	if [[ -r "$file" ]] && [[ -f "$file" ]]; then
-		# shellcheck source=/dev/null
-		source "$file"
-	fi
-done
-unset file
-
-## Load the completion files:
-#for file in ~/.autocompletion_functions/*; do
-#	if [[ -r "$file" ]] && [[ -f "$file" ]]; then
-#		# shellcheck source=/dev/null
-#		source "$file"
-#	fi
-#done
-#unset file
+# reset text properties
+# see https://wiki.archlinux.org/index.php/Bash/Prompt_customization#Escapes_between_command_input_and_output
+#trap 'tput sgr0' DEBUG
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
@@ -60,8 +38,13 @@ shopt -s checkwinsize
 	grep -v "[?*]" | cut -d " " -f2 | \
 	tr ' ' '\n')" scp sftp ssh
 
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+# start the agent automatically and make sure that only one ssh-agent process runs at a time
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+	ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"
+fi
+if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
+	source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
+fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -75,6 +58,7 @@ if ! shopt -oq posix; then
 		. /etc/bash_completion
 	fi
 fi
+
 if [[ -d /etc/bash_completion.d ]]; then
 	for file in /etc/bash_completion.d/* ; do
 		# shellcheck source=/dev/null
@@ -101,14 +85,15 @@ fi
 # add alias for ssh to update the tty
 alias ssh="gpg-connect-agent updatestartuptty /bye >/dev/null; ssh"
 
-# old
-#
-
-## Autocompletion functions
-#source ~/.autocompletion_functions/pass.bash-completion
-#source /usr/share/nvm/init-nvm.sh
-## RVM
-#[[ -r "$HOME/.rvm/scripts/completion" ]] && source "$HOME/.rvm/scripts/completion"
-
 # PS1 prompt
 source ~/.config/bash/.pure.sh
+
+# Load the shell dotfiles
+#for file in ~/.{aliases,functions,dockerfunc,path,exports}; do
+for file in ~/.config/bash/.{aliases,autocompletion,functions,exports}; do
+	if [[ -r "$file" ]] && [[ -f "$file" ]]; then
+		# shellcheck source=/dev/null
+		source "$file"
+	fi
+done
+unset file

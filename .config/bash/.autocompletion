@@ -1,3 +1,5 @@
 #!/bin/bash
 
 source /usr/share/git/completion/git-completion.bash
+source <(kubectl completion bash)
+complete -o default -F __start_kubectl k

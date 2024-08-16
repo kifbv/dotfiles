@@ -18,7 +18,9 @@ export HISTTIMEFORMAT="%F:%T"
 
 # Color for less and man
 export MANPAGER='less -s -M +Gg'
-export LESS="--RAW-CONTROL-CHARS"
+export LESS="-R --RAW-CONTROL-CHARS"
+export LESSOPEN="|lesspipe.sh %s"
+export LESSCOLORIZER='bat'
 
 # man colors
 export LESS_TERMCAP_mb=$(tput bold; tput setaf 2) # green
@@ -36,8 +38,7 @@ export LESS_TERMCAP_ZO=$(tput ssupm)
 export LESS_TERMCAP_ZW=$(tput rsupm)
 export GROFF_NO_SGR=1
 
-export DBUS_SESSION_BUS_ADDRESS
-DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/user/$(id -u)/bus
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/user/$(id -u)/bus
 
 export TODOTXT_DEFAULT_ACTION=ls
 
@@ -46,21 +47,6 @@ export TODOTXT_DEFAULT_ACTION=ls
 #export GDK_DPI_SCALE=0.5
 #export QT_DEVICE_PIXEL_RATIO=2
 
-# turn on go vendoring experiment
-#export GO15VENDOREXPERIMENT=1
-
-#export DOCKER_CONTENT_TRUST=1
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-#export PATH="$PATH:$HOME/.rvm/bin"
-# https://github.com/rvm/rubygems-bundler
-# to be able to work also with bundler
-#export RUBYGEMS_GEMDEPS=-
-
-# disable the default virtualenv prompt change
-#export VIRTUAL_ENV_DISABLE_PROMPT=1
-
-# Set git config according to hostname
 #export GIT_CONFIG=$HOME/.gitconfig_$HOSTNAME
 #[[ -h ~/.gitconfig ]] || ln -s ~/.gitconfig_$HOSTNAME ~/.gitconfig
 

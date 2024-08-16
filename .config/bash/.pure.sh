@@ -34,6 +34,7 @@ prompt_symbol="❯"
 prompt_clean_symbol="☀ "
 prompt_dirty_symbol="☂ "
 prompt_venv_symbol="☁ "
+prompt_nix_symbol="⬢ "
 
 function prompt_command() {
 	# Local or SSH session?
@@ -62,6 +63,12 @@ function prompt_command() {
 		fi
 	fi
 
+	# Nix
+	local nix_prompt=
+	if [ -n "$IN_NIX_SHELL" ]; then
+	    nix_prompt=" $BLUE$prompt_nix_symbol$NOCOLOR"
+	fi
+
 	# Virtualenv
 	local venv_prompt=
 	if [ -n "$VIRTUAL_ENV" ]; then
@@ -81,7 +88,7 @@ function prompt_command() {
 	[ -n "$user_prompt" ] || [ -n "$host_prompt" ] && login_delimiter=":"
 
 	# Format prompt
-	first_line="$user_prompt$host_prompt$login_delimiter$WHITE\w$NOCOLOR$git_prompt$venv_prompt"
+	first_line="$user_prompt$host_prompt$login_delimiter$WHITE\w$NOCOLOR$git_prompt$venv_prompt$nix_prompt"
 	# Text (commands) inside \[...\] does not impact line length calculation which fixes stange bug when looking through the history
 	# $? is a status of last command, should be processed every time prompt prints
 	second_line="\`if [ \$? = 0 ]; then echo \[\$CYAN\]; else echo \[\$RED\]; fi\`\$prompt_symbol\[\$NOCOLOR\] "

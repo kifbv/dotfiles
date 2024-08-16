@@ -18,7 +18,7 @@ window#waybar {
 }
 
 #workspaces button.focused {
-  color: white;
+  color: #8fd4ff;
   border: 1px solid #8fd4ff;
   border-radius: 6px;
 }
@@ -29,9 +29,11 @@ window#waybar {
   border-radius: 6px;
 }
 
+#workspaces button {
+  color: grey;
+}
+
 #tray,
-#custom-japan,
-#custom-germany,
 #temperature,
 #clock,
 #battery,
