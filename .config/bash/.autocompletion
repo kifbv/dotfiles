@@ -1,5 +1,9 @@
 #!/bin/bash
 
 source /usr/share/git/completion/git-completion.bash
+
 source <(kubectl completion bash)
 complete -o default -F __start_kubectl k
+
+source /usr/share/fzf/key-bindings.bash
+source /usr/share/fzf/completion.bash
