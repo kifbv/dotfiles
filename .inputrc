@@ -38,3 +38,6 @@ set echo-control-characters off
 
 # faster completion
 set show-all-if-ambiguous on
+
+# search through pet snippets (see also .functions file)
+bind -x '"\C-x\C-r": pet-select'

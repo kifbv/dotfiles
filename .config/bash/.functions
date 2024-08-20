@@ -403,6 +403,19 @@ golistdeps(){
 	)
 }
 
+# add previous command to pet
+prev() {
+	PREV=$(fc -lrn | head -n2 | tail -n1)
+	sh -c "pet new $(printf %q "$PREV")"
+}
+
+# search throug pet snippets
+pet-select() {
+	BUFFER=$(pet search --query "$READLINE_LINE")
+	READLINE_LINE=$BUFFER
+	READLINE_POINT=${#BUFFER}
+}
+
 ## get the name of a x window
 #xname(){
 #	local window_id=$1
