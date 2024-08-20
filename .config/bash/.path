@@ -7,3 +7,6 @@ export PATH="$PATH:$GOBIN"
 
 # Local
 export PATH="$PATH:$HOME/.local/bin"
+
+# Krew
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
