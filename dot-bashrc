@@ -86,11 +86,11 @@ fi
 alias ssh="gpg-connect-agent updatestartuptty /bye >/dev/null; ssh"
 
 # PS1 prompt
-source ~/.config/bash/.pure.sh
+source ~/.config/bash/pure.sh
 
 # Load the shell dotfiles
 #for file in ~/.{aliases,functions,dockerfunc,path,exports}; do
-for file in ~/.config/bash/.{aliases,autocompletion,functions,exports}; do
+for file in ~/.config/bash/{aliases,autocompletion,functions,exports}; do
 	if [[ -r "$file" ]] && [[ -f "$file" ]]; then
 		# shellcheck source=/dev/null
 		source "$file"

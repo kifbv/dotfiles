@@ -22,9 +22,6 @@ set enable-bracketed-paste on
 set completion-ignore-case on
 set completion-map-case on
 
-# do not echo ^C when Control-c is pressed
-set echo-control-characters off
-
 # some bindings
 # get man page of command before cursor with ESC-m
 "\em": "\C-a\eb\ed\C-y\e#man \C-y\C-m\C-p\C-p\C-a\C-d\C-e"
@@ -40,4 +37,4 @@ set echo-control-characters off
 set show-all-if-ambiguous on
 
 # search through pet snippets (see also .functions file)
-bind -x '"\C-x\C-r": pet-select'
+#bind -x '"\C-x\C-r": pet-select'

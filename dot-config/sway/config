@@ -205,17 +205,19 @@ input identifier:"21558:24672:Tokyo_Keyboard_Tokyo60" {
     # If there are multiple scratchpad windows, this command cycles through them.
     bindsym $mod+minus scratchpad show
 #
-# Special keys
+# Keyboard keys
 #
     bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
     bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
     bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+    bindsym XF86MonBrightnessUp exec backlight_control +10
+    bindsym XF86MonBrightnessDown exec backlight_control -10
 
 #
 # Screenshots
 #
     # Screenshot part of screen and copy to clipboard
-    bindsym $mod+g slurp | grim -g - - | wl-copy
+    bindsym $mod+g exec slurp | grim -g - - | wl-copy
 
 #
 # Resizing containers:

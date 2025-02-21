@@ -220,3 +220,5 @@
 
 [init]
 	defaultBranch = main
+[safe]
+	directory = /home/franck/github.com/armbian/build
